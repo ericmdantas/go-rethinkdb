@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	r "gopkg.in/dancannon/gorethink.v2"
 )
@@ -21,11 +22,18 @@ func create() {
 
 func read() {
 	s, _ := session()
-	fmt.Println(s.Server())
+	
+	t, err := r.Table("todo").Run(s)
+	
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	
+	fmt.Println(t)
 }
 
 func main() {
-	c := flag.Bool("c", true, "")
+	c := flag.Bool("c", false, "")
 	flag.Parse()
 
 	if *c {
